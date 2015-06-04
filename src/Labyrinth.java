@@ -4,39 +4,64 @@
 Y     W<+>E
 |       v
 0-X->   S
-
-Axiomes:
-Labyrinthe l1 = l2.fromString(l1.toString())
-
-l.isWallNorth(Position(x, y)) = l.isWallSouth(Position(x, y + 1))
-l.isWallEast(Position(x, y)) = l.isWallWest(Position(x + 1, y))
-
-l.isWallNorth(Position(x, l.getHeight() - 1)) = true
-l.isWallSouth(Position(x, 0)) = true
-l.isWallEast(Position(l.getWidth() - 1, y)) = true
-l.isWallWest(Position(0, y)) = true
-
-String representation:
-
-Example for a 3x3 labyrinth:
-bbbbbbbbbbbb
-b (0: no wall or 1: wall): the walls, horizontally (south to north), then vertically (west to east), line by line, no edges
 */
 public interface Labyrinth {
-	public String toString();
-	public void fromString(String str);
-	public boolean isWallNorth(Position pos);
-	public boolean isWallSouth(Position pos);
-	public boolean isWallEast(Position pos);
-	public boolean isWallWest(Position pos);
+	
+	/**
+	 * @param pos Position from where we look for walls
+	 * @param ori Orientation from the Position from where we look for a wall
+	 * @param true if there is a wall, else false
+	 */
+	public boolean isWall(Position pos, Orientation ori);
+	
+	/**
+	 * @param pos Position from where we want to set walls
+	 * @param ori Orientation from the Position from where we want to set a wall
+	 * @return b true if we want to set a wall, false if we want to remove a wall
+	 */
+	public void setWall(Position pos, Orientation ori, boolean b);
+	
+	/**
+	 * @param pos Position to get explored state
+	 * @return true if explored, else false
+	 */
 	public boolean isExplored(Position pos);
-	public void setWallNorth(Position pos, boolean b);
-	public void setWallSouth(Position pos, boolean b);
-	public void setWallEast(Position pos, boolean b);
-	public void setWallWest(Position pos, boolean b);
-	public void setExplored(Position pos, boolean b);
+	
+	/**
+	 * @param pos Position to explore
+	 * @param b If it set explored or not
+	 * @return New Position if the Position to explore has changed
+	 */
+	public Position setExplored(Position pos, boolean b);
+	
+	/**
+	 * @return Width of the Labyrinth (number of rows)
+	 */
 	public int getWidth();
+	
+	/**
+	 * @return Height of the Labyrinth (number of lines)
+	 */
 	public int getHeight();
+	
+	/**
+	 * @return Starting Position in the Labyrinth
+	 */
 	public Position getStart();
+	
+	/**
+	 * @return Goal Position in the Labyrinth
+	 */
 	public Position getEnd();
+	
+	/**
+	 * @param pos Goal Position in the Labyrinth
+	 */
+	public void setEnd(Position pos);
+	
+	/**
+	 * Find the quickest path to go from the start to the end of the Labyrinth.
+	 * @return A sequence of instructions to follow the path
+	 */
+	public String findPath(Position start, Position end);
 }
